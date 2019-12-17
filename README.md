@@ -1,78 +1,228 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+<p  align="center"><img  src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg"  width="400"></p>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+# Devinweb project : delivery problems. 
 
-## About Laravel
+This is the backend part of the Devinweb project. It's built using the framework **Laravel**.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+# Usage
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+To run locally, clone this GitHub repository to your machine. 
+In order to manage its dependencies, Laravel utilizes **Composer** dependencies which is can be installed via the command:
 
-## Learning Laravel
+    composer install
+  Once installed, you need to generate the `.env` file using the command:
+  
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+    cp .env.example .env
+ The next thing you should do is set the application key via the command:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+     php artisan key:generate
+In order to create the tables, you need to create a database in your database server and configure it in the Laravel's `.env` file.
 
-## Laravel Sponsors
+Then to run the migrations, execute the `migrate` Artisan command:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+     php artisan migrate
+To run the project, use the following `serve` command:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
-- [Appoly](https://www.appoly.co.uk)
-- [OP.GG](https://op.gg)
+    php artisan serve --host=127.0.0.1
 
-## Contributing
+  
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Backend Documentation
 
-## Code of Conduct
+## API
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+All endpoints verify the request's payload and return a `400` in case of a bad request (absence of parameter, invalid date format...) or a `404` in case of a resource not found or similar error (City not found, Delivery time not attached to city ...). in case of success, server returns a `200` code.
 
-## Security Vulnerabilities
+**Admin Endpoints:** 
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+API calls should be made to:
 
-## License
+    http://admin.localhost:8000/api
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+**-- POST /api/city**
+
+This endpoint is used to create a new city. It takes the "name" as a parameter.
+### Example
+Request Payload:
+``` json
+{
+    "name": "Tanger"
+}
+```
+Response:
+``` json
+{
+	"id": 1,
+	"name": "Tanger",
+	"slug": "tanger",
+	"created_at": "2019-12-17 15:46:39",
+	"updated_at": "2019-12-17 15:46:39"
+}
+```
+**-- POST /api/delivery-times**
+
+This endpoint is used to create delivery time spans. It takes the "span" as a parameter.
+### Example
+Request Payload:
+``` json
+{
+    "span": "12->14PM"
+}
+```
+Response:
+``` json
+{
+   "id":1,
+   "span":"12->14PM",
+   "created_at":"2019-12-17 17:31:18",
+   "updated_at":"2019-12-17 17:31:18"
+}
+```
+**-- POST /api/city/{city_id}/delivery-times**
+
+This endpoint is used to attach delivery times to a city. It takes an array of "delivery times" as a parameter.
+### Example
+Request Payload:
+``` json
+{
+   "deliveryTimes":[
+      1,
+      3,
+      4,
+      5000
+   ]
+}
+``` 
+Response:
+``` json
+[
+   {
+      "id":1,
+      "span":"12->14PM",
+      "created_at":"2019-12-17 17:31:18",
+      "updated_at":"2019-12-17 17:31:18",
+      "pivot":{
+         "city_id":1,
+         "delivery_time_id":1
+      }
+   }
+]
+```
+**-- POST /api/city/{city_id}/delivery-times/{delivery_time_id}**
+
+This endpoint is used to exclude a delivery time from a city's delivery dates.
+
+### Example
+
+Request Payload:
+``` json
+{
+    "date": "2019-12-17"
+}
+```
+Response:
+```json
+{
+   "id":1,
+   "city_delivery_time_id":1,
+   "date":"2019-12-17",
+   "created_at":"2019-12-17 18:04:25",
+   "updated_at":"2019-12-17 18:04:25"
+}
+```
+**-- POST /api/city/{city_id}/delivery-dates**
+
+This endpoint is used to exclude all delivery times.
+
+### Example
+
+Request Payload:
+```json
+{
+    "date": "2018-09-14"
+}
+```
+Response:
+
+    Excluded successfully.
+
+##
+
+ **Website**
+
+API calls should be sent to:
+
+     http://localhost:8000/api
+
+**-- POST api/city/{city_id}/delivery-dates-times/{number_of_days_to_get}**
+
+This endpoint is used to return all the city delivery dates times except for the excluded ones in a specific format.
+
+### Response Example:
+```json
+{
+   "dates":[
+      {
+         "day_name":"Tuesday",
+         "date":"2019-12-17",
+         "delivery_times":[
+
+         ]
+      },
+      {
+         "day_name":"Wednesday",
+         "date":"2019-12-18",
+         "delivery_times":[
+            {
+               "id":1,
+               "city_id":1,
+               "delivery_time_id":1,
+               "created_at":"2019-12-17 17:49:51",
+               "updated_at":"2019-12-17 17:49:51"
+            }
+         ]
+      },
+      {
+         "day_name":"Thursday",
+         "date":"2019-12-19",
+         "delivery_times":[
+            {
+               "id":1,
+               "city_id":1,
+               "delivery_time_id":1,
+               "created_at":"2019-12-17 17:49:51",
+               "updated_at":"2019-12-17 17:49:51"
+            }
+         ]
+      },
+      {
+         "day_name":"Friday",
+         "date":"2019-12-20",
+         "delivery_times":[
+            {
+               "id":1,
+               "city_id":1,
+               "delivery_time_id":1,
+               "created_at":"2019-12-17 17:49:51",
+               "updated_at":"2019-12-17 17:49:51"
+            }
+         ]
+      },
+      {
+         "day_name":"Saturday",
+         "date":"2019-12-21",
+         "delivery_times":[
+            {
+               "id":1,
+               "city_id":1,
+               "delivery_time_id":1,
+               "created_at":"2019-12-17 17:49:51",
+               "updated_at":"2019-12-17 17:49:51"
+            }
+         ]
+      }
+   ]
+}
+```
